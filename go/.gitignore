@@ -1,0 +1,10 @@
+
+.idea
+.idea/*
+.idea\*
+vendor
+.iws
+workspace.xml
+tasks.xml
+.idea/modules.xml
+.idea/vcs.xml
