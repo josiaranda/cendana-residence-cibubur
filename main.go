@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/josiaranda/cendana-residence-cibubur/handler"
 	"github.com/josiaranda/cendana-residence-cibubur/handler/User"
 	"github.com/josiaranda/cendana-residence-cibubur/model"
@@ -22,6 +23,7 @@ func main() {
 
 	db.AutoMigrate(&model.User{})
 	app := fiber.New()
+	app.Use(cors.New())
 
 	handler := handler.Handler{
 		Db: db,
@@ -29,6 +31,9 @@ func main() {
 	}
 
 	User.Register(handler, "api/users")
+
+	app.Static("/","./web/public",fiber.Static{Browse: true})
+
 	p := os.Getenv("PORT")
 	if p == "" {
 		p = "3000"
