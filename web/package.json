@@ -7,7 +7,6 @@
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
-    "develop-secure": "set NODE_TLS_REJECT_UNAUTHORIZED=0&&gatsby develop --https --key-file server.key --cert-file server.cert",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
