@@ -8,3 +8,4 @@ workspace.xml
 tasks.xml
 .idea/modules.xml
 .idea/vcs.xml
+.env
