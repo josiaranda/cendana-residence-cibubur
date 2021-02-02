@@ -35,8 +35,8 @@ export default function ButtonAppBar() {
                     {/*<IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">*/}
                     {/*    <MenuIcon />*/}
                     {/*</IconButton>*/}
-                    <Typography variant="h6" className={classes.title}>
-                        <Link to={"/"} className={clsx(classes.home)}>Keluarga Cendana Cibubur</Link>
+                    <Typography variant="h6" classes={classes.title} className={classes.title}>
+                        <Link to={"/"} activeClassName={clsx(classes.home)}>Keluarga Cendana Cibubur</Link>
                     </Typography>
                 </Toolbar>
             </AppBar>

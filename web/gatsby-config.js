@@ -5,8 +5,9 @@
  */
 
 module.exports = {
-  /* Your site config here */
-  plugins: [
-    "gatsby-plugin-use-query-params",
-  ],
+    /* Your site config here */
+    plugins: [
+        "gatsby-plugin-material-ui",
+        "gatsby-plugin-use-query-params",
+    ],
 }

@@ -1,4 +1,4 @@
-const API = `http://localhost:3000`;
+const API = ``;
 
 export const getAllUser = () => {
     return new Promise((resolve, reject) => {
