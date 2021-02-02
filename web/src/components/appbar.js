@@ -1,8 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import {Link} from "gatsby";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import clsx from "clsx";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -14,6 +16,12 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         flexGrow: 1,
+    },
+    home:{
+        textDecoration:"none",
+        "&:visited":{
+            color:"inherit"
+        }
     },
 }));
 
@@ -28,7 +36,7 @@ export default function ButtonAppBar() {
                     {/*    <MenuIcon />*/}
                     {/*</IconButton>*/}
                     <Typography variant="h6" className={classes.title}>
-                        Keluarga Cendana Cibubur
+                        <Link to={"/"} className={clsx(classes.home)}>Keluarga Cendana Cibubur</Link>
                     </Typography>
                 </Toolbar>
             </AppBar>

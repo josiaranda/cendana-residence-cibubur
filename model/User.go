@@ -21,6 +21,11 @@ func (u *User) Update(db *gorm.DB) (err error) {
 	return
 }
 
+func (u *User) Get(db *gorm.DB) (err error) {
+	err = db.Find(&u).Error
+	return
+}
+
 type Users []*User
 
 func (u *Users) Get(db *gorm.DB) (err error) {

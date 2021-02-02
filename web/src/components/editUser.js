@@ -1,9 +1,11 @@
-import React, {Fragment, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import FilledInput from '@material-ui/core/FilledInput';
 import IconButton from '@material-ui/core/IconButton';
+import Divider from '@material-ui/core/Divider';
+
 
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
@@ -12,9 +14,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
 import ControlPointIcon from "@material-ui/icons/ControlPoint";
 import Button from "@material-ui/core/Button";
-import {createUser} from "../model/data";
-import Divider from "@material-ui/core/Divider";
-import ContactCard from "./contactCard";
+import {getOneUser, patchUser} from "../model/data";
+import ContactCard from'./contactCard.js'
 import Grid from "@material-ui/core/Grid";
 
 
@@ -27,10 +28,12 @@ const useStyles = makeStyles((theme) => ({
     fc: {
         margin: "17px",
         minWidth: "300px"
+    },
+    submitBtn:{
+        margin: "17px",
     }
 
 }));
-
 function toTitleCase(str) {
     return str.replace(
         /\w\S*/g,
@@ -39,19 +42,15 @@ function toTitleCase(str) {
         }
     );
 }
-
 export default function NewUser(props) {
+
+
     const classes = useStyles();
 
     const [submitDisabled,setSubmitDisabled] = useState(false);
 
-    const [data, setData] = useState({
-        name: null,
-        phone: null,
-        nickname: "",
-        blok: null,
-        image: "",
-    });
+    const [data, setData] = useState({...props.data});
+    const [oldImage, setOldImage] = useState(props.data.image);
 
     const [error, setError] = useState({
         name: [false, ""],
@@ -75,7 +74,7 @@ export default function NewUser(props) {
             const f = event.target.files[0];
 
             if (typeof f === "undefined") {
-                setData({...data, [prop]: ""});
+                setData({...data, [prop]: oldImage});
                 return
             }
 
@@ -99,16 +98,20 @@ export default function NewUser(props) {
             setSubmitDisabled(false);
             return
         }
-        createUser({...data,phone:`+62${data.phone}`})
+        if (data.image === ""){
+            delete data.image;
+        }
+        console.log("data",{...data,phone:`+62${data.phone}`})
+        patchUser({...data,phone:`+62${data.phone}`})
             .then(value => {
-                alert("Create success");
+                alert("Update success");
                 const isBrowser = () => typeof window !== "undefined"
                 if (isBrowser()){
                     window.location = "/admin";
                 }
             })
             .catch(reason => {
-                alert(`Create failed: ${reason.msg || "Unknown"}`);
+                alert(`Update failed: ${reason.msg || "Unknown"}`);
                 setSubmitDisabled(false);
             })
 
@@ -209,6 +212,9 @@ export default function NewUser(props) {
                     value={data.name}
                     onChange={handleChange('name')}
                     onBlur={validateName}
+                    InputProps={{
+                        notched:data.name
+                    }}
                     placeholder={"John Doe"}
                     labelWidth={45}
                     variant={"outlined"}
@@ -297,9 +303,8 @@ export default function NewUser(props) {
                     <ContactCard {...data}/>
                 </Grid>
             </Grid>
-
             <Button
-                style={{margin:"17px"}}
+                className={clsx(classes.submitBtn)}
                 onClick={handleSubmit}
                 variant="contained"
                 color="default"

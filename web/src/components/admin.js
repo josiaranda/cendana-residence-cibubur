@@ -11,6 +11,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import ControlPointIcon from '@material-ui/icons/ControlPoint';
+import Avatar from '@material-ui/core/Avatar';
+
 
 const useStyles = makeStyles({
     table: {
@@ -30,27 +32,26 @@ const useStyles = makeStyles({
 });
 
 function RenderTableRow(props) {
+    console.log(props,"props")
     return (
         props.data.map((row) => (
             <TableRow key={row.id}>
-                <TableCell component="th" scope="row">
-                    {row.name}
-                </TableCell>
-                <TableCell align="right">{row.phone}</TableCell>
-                <TableCell align="right">{row.nickname}</TableCell>
-                <TableCell align="right">{row.blok}</TableCell>
-                <TableCell align="right">{row.image}</TableCell>
-                <TableCell align="right">{row.image}</TableCell>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.phone}</TableCell>
+                <TableCell>{row.nickname}</TableCell>
+                <TableCell>{row.blok}</TableCell>
+                <TableCell><Avatar alt={row.name} src={row.image}/></TableCell>
+                <TableCell><Link to={`/admin/edit?id=${row.ID}`}>Edit</Link></TableCell>
             </TableRow>
         ))
     )
 }
 
-function RenderEmptyTableRow() {
+function RenderEmptyTableRow(props) {
     return (
         <TableRow>
             <TableCell component="th" scope="row" colSpan={6}>
-                No Data
+                {props.isLoading?`Loading...`:`No data`}
             </TableCell>
 
         </TableRow>
@@ -60,10 +61,15 @@ function RenderEmptyTableRow() {
 export default function Admin(props) {
     const classes = useStyles();
 
+    const [isDataLoading, setIsDataLoading] = useState(false);
     const [data, setData] = useState([]);
     useEffect(() => {
+        setIsDataLoading(true);
         getAllUser()
             .then(d => setData(d))
+            .finally(() => {
+                setIsDataLoading(false);
+            })
         ;
     }, []);
 
@@ -85,15 +91,15 @@ export default function Admin(props) {
                     <TableHead>
                         <TableRow>
                             <TableCell>Nama</TableCell>
-                            <TableCell align="right">WA Phone</TableCell>
-                            <TableCell align="right">Panggilan</TableCell>
-                            <TableCell align="right">Blok</TableCell>
-                            <TableCell align="right">Image</TableCell>
-                            <TableCell align="right"></TableCell>
+                            <TableCell>WA Phone</TableCell>
+                            <TableCell>Panggilan</TableCell>
+                            <TableCell>Blok</TableCell>
+                            <TableCell>Image</TableCell>
+                            <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {data.length > 1 ? <RenderTableRow/> : <RenderEmptyTableRow/>}
+                        {data.length > 0 ? <RenderTableRow data={data}/> : <RenderEmptyTableRow isLoading={isDataLoading}/>}
                     </TableBody>
                 </Table>
             </TableContainer>

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/go-redis/redis/v8"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/josiaranda/cendana-residence-cibubur/handler"
@@ -22,15 +23,22 @@ func main() {
 	//db.Exec("drop table users")
 
 	db.AutoMigrate(&model.User{})
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     os.Getenv("REDIS_ADDR"),
+		Password: os.Getenv("REDIS_PASS"), // no password set
+		DB:       0,  // use default DB
+	})
+
 	app := fiber.New()
 	app.Use(cors.New())
 
-	handler := handler.Handler{
+	h := handler.Handler{
 		Db: db,
 		Fb: app,
+		Rdb: rdb,
 	}
 
-	User.Register(handler, "api/users")
+	User.Register(h, "api/users")
 
 	app.Static("/","./web/public",fiber.Static{Browse: true})
 
